@@ -1,0 +1,139 @@
+1. Create Image (using Dockerfile)
+Dockerfile:
+
+dockerfile
+Copy
+Edit
+FROM nginx:latest
+➡️ Here we are using the official Nginx base image.
+
+Build image:
+
+bash
+Copy
+Edit
+docker build -t mynginx-image .
+2. Run Container with -d (Detached Mode)
+Command:
+
+bash
+Copy
+Edit
+docker run -d --name mynginx -p 8080:80 mynginx-image
+👉 Meaning:
+
+-d → Detached (background mode).
+
+Container runs in background.
+
+Your terminal is free to run other commands.
+
+Check logs:
+
+bash
+Copy
+Edit
+docker logs mynginx
+Check in browser:
+➡️ http://localhost:8080
+
+3. Run Container with -it (Interactive + Terminal)
+Command:
+
+bash
+Copy
+Edit
+docker run -it --name mynginx2 -p 8081:80 mynginx-image
+👉 Meaning:
+
+-i → Interactive (keeps STDIN open).
+
+-t → Allocates a terminal (like Linux shell).
+
+Together = -it → Interactive terminal.
+
+⚠️ Important:
+
+Container runs in foreground.
+
+If you press CTRL+C, container will stop.
+
+4. Run Container with -dit (Detached + Interactive)
+Command:
+
+bash
+Copy
+Edit
+docker run -dit --name mynginx3 -p 8082:80 mynginx-image
+👉 Meaning:
+
+Runs in background (detached).
+
+Allocates a terminal (interactive).
+
+You can later enter the container shell.
+
+Enter container:
+
+bash
+Copy
+Edit
+docker exec -it mynginx3 bash
+Inside container, check files:
+
+bash
+Copy
+Edit
+ls /usr/share/nginx/html
+cat /etc/nginx/nginx.conf
+5. Summary Table
+Option	Meaning	Behavior	Example Usage
+-d	Detached	Runs in background	Running services (Nginx, DB)
+-it	Interactive + TTY	Runs in foreground with terminal	Debugging, testing
+-dit	Detached + Interactive	Background + can attach later	Running + debugging
+
+👉 Simple Analogy:
+
+-d = Switch on fan and leave the room.
+
+-it = Sit in room and operate fan manually.
+
+-dit = Switch on fan, leave room, but you can come back anytime with a remote. 😃
+
+| Option | Meaning                | Behavior                  | Example Usage        |
+| ------ | ---------------------- | ------------------------- | -------------------- |
+| `-d`   | Detached               | Runs in background        | Services (Nginx, DB) |
+| `-it`  | Interactive + TTY      | Foreground with terminal  | Debugging, testing   |
+| `-dit` | Detached + Interactive | Background + attach later | Running + debugging  |
+
+
+Interview Q&A
+Q1. What is the difference between -d and -it?
+
+-d runs the container in background (detached).
+
+-it runs in foreground with an interactive terminal.
+
+Q2. What happens if you combine -d and -it (-dit)?
+
+Container runs in background but still has a terminal allocated.
+
+You can attach/exec into it later.
+
+Q3. Why do we usually run Nginx with -d and not -it?
+
+Nginx is a service (web server).
+
+It should run in background continuously → so -d is used.
+
+Q4. If you run a container with -it and close the terminal, what happens?
+
+Container stops.
+
+Because it depends on the foreground process.
+
+Q5. When would you use docker exec -it?
+
+To enter a running container (started with -d or -dit).
+
+For debugging or checking logs/config files.
